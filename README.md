@@ -1,4 +1,4 @@
-# Digital Thermometer Range Detector — FPGA Project
+# Digital Temperature Range Detector — FPGA Project
 
 A Verilog-based digital logic circuit implemented on an FPGA Zynq-7000 family (Blackboard development board) that detects when a digitized temperature reading falls within the range of **62.5°C to 72.5°C**, lighting up an LED as the output indicator.
 
