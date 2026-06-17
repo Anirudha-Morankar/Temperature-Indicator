@@ -11,8 +11,7 @@ A Verilog-based digital logic circuit implemented on an FPGA Zynq-7000 family (B
 3. [How the Problem Was Addressed](#3-how-the-problem-was-addressed)
 4. [K-Map Simplification](#4-k-map-simplification)
 5. [Verilog Implementation & XDC Constraints](#5-verilog-implementation--xdc-constraints)
-6. [Testbench](#6-testbench)
-7. [Skills Demonstrated](#7-skills-demonstrated)
+6. [Skills Demonstrated](#6-skills-demonstrated)
 
 ---
 
