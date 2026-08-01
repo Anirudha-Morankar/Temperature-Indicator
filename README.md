@@ -1,6 +1,6 @@
 # Digital Thermometer Range Detector — FPGA Project
 
-A Verilog-based digital logic circuit implemented on an FPGA Zynq-7000 family (Blackboard development board) that detects when a digitized temperature reading falls within the range of **62.5°C to 72.5°C**, lighting up an LED as the output indicator.
+A Verilog and VHDL based digital logic circuit implemented on an FPGA Zynq-7000 family (Blackboard development board) that detects when a digitized temperature reading falls within the range of **62.5°C to 72.5°C**, lighting up an LED as the output indicator.
 
 ---
 
@@ -41,7 +41,7 @@ The design follows the complete FPGA development workflow:
 1. Identify the binary range corresponding to 62.5°C–72.5°C using Excel (`DEC2BIN()`)
 2. Analyze bit patterns and reduce the problem using K-maps
 3. Derive a minimized Boolean expression
-4. Implement the circuit in **Verilog HDL**
+4. Implement the circuit in **Verilog HDL and VHDL**
 5. Simulate with a testbench in **Vivado Simulator**
 6. Map I/O to physical FPGA pins using the **XDC constraints file**
 7. Generate a **bitstream** and program the Blackboard
@@ -248,7 +248,7 @@ Where A7 is the MSB and A0 is the LSB.
 
 ---
 
-## 5. Verilog Implementation & XDC Constraints
+## 5. Verilog/VHDL Implementation & XDC Constraints
 
 ### Top-Level Module (`thermometer_detector.v`)
 
@@ -263,7 +263,25 @@ module thermometer_detector(
 
 endmodule
 ```
+```
+library ieee;
+use ieee.std_logic_1164.all;
 
+entity thermometer_detector is
+    port (
+        A   : in  std_logic_vector(7 downto 0);
+        led : out std_logic
+    );
+end entity thermometer_detector;
+
+architecture rtl of thermometer_detector is
+begin
+
+    led <= A(7) and (not A(6)) and A(5) and ( (not A(4)) or (not A(3)) or
+             ((not A(2)) and (not A(1)) and (not A(0))) );
+
+end architecture rtl;
+```
 ### XDC Constraints File (`blackboard.xdc`)
 
 The XDC file maps Verilog port names to physical FPGA pins on the Blackboard board:
@@ -297,7 +315,7 @@ The XDC file maps Verilog port names to physical FPGA pins on the Blackboard boa
 
 | Skill | Application in This Project |
 |---|---|
-| **Verilog HDL** | Designed the combinational logic module using structural Boolean `assign` statements derived from K-map analysis |
+| **Verilog HDL and VHDL** | Designed the combinational logic module using structural Boolean `assign` statements derived from K-map analysis |
 | **K-Map Simplification** | Used Karnaugh maps to minimize a 4-variable Boolean function, split by the A4 bit to reduce complexity |
 | **Vivado Design Suite** | Created and managed the full Vivado project including source files, simulation sets, and implementation runs |
 | **Vivado Simulation (xsim)** | Wrote and executed a complete Verilog testbench; verified functional correctness via waveform analysis |
@@ -313,7 +331,7 @@ The XDC file maps Verilog port names to physical FPGA pins on the Blackboard boa
 ```
 fpga-thermometer-range-detector/
 ├── src/
-│   ├── thermometer_detector.v        # Top-level RTL Verilog module
+│   ├── thermometer_detector.v or thermometer_detector.vhd     # Top-level RTL Verilog module
 │   └── thermometer_detector_tb.v     # Simulation testbench
 ├── constraints/
 │   └── blackboard.xdc                # Vivado XDC pin constraints
